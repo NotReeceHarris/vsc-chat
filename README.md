@@ -5,6 +5,8 @@
 
 VSC-Chat is a real-time messaging service integrated into Visual Studio Code, enabling developers to connect directly from their development workflow without the need for external services like Slack, Discord, etc. This seamless integration enhances collaboration and communication within the coding environment, streamlining the exchange of ideas and information among team members. With VSC-Chat, developers can discuss code, share insights, and address issues promptly, fostering a more efficient and cohesive development process.
 
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%202.svg)](https://www.digitalocean.com/?refcode=38df42524d97&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+
 ## Features
 
 - **Group chats**: Create group chats with up to 12 users.
