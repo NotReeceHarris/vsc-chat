@@ -20,7 +20,7 @@
         {
           "id": "vsc-chat-panel-view",
           "title": "VSC Chat",
-          "icon": "media/icon.svg"
+          "icon": "assets/icons/icon.svg"
         }
       ]
     },
@@ -30,7 +30,7 @@
           "type": "webview",
           "id": "vsc-chat.panel",
           "name": "VSC Chat",
-          "icon": "media/icon.svg",
+          "icon": "assets/icons/icon.svg",
           "contextualTitle": "VSC Chat",
           "webviewId": "vsc-chat-panel-view"
         }
@@ -42,8 +42,8 @@
         "title": "Logout",
         "category": "VSC Chat",
         "icon": {
-          "dark": "media/dark/log-out.svg",
-          "light": "media/light/log-out.svg"
+          "dark": "assets/icons/dark/log-out.svg",
+          "light": "assets/icons/light/log-out.svg"
         }
       }
     ],
@@ -63,7 +63,7 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "tw": "npx tailwindcss -i tailwind.css -o ./media/style.min.css --watch --minify",
+    "tw": "npx tailwindcss -i tailwind.css -o ./assets/style.min.css --watch --minify",
     "test": "vscode-test"
   },
   "devDependencies": {
