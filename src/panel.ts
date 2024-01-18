@@ -60,8 +60,7 @@ export class panelProvider implements vscode.WebviewViewProvider {
         const translations = require('../translations.json');
 
         const language = vscode.env.language;
-        // const translation = translations[language] || translations['en'];
-        const translation = translations['zh'];
+        const translation = translations[language] || translations['en'];
 
         const nonce = getNonce();
 
@@ -134,7 +133,7 @@ export class panelProvider implements vscode.WebviewViewProvider {
 
         return `
             <!DOCTYPE html>
-			<html lang="${vscode.env.language || 'en'}" class="h-full">
+			<html lang="${language}" class="h-full">
                 <head>
                     <meta charset="UTF-8">
                     <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
