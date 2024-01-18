@@ -41,7 +41,7 @@
         "command": "vsc-chat.logout",
         "title": "Logout",
         "category": "VSC Chat",
-        "icon":  {
+        "icon": {
           "dark": "media/dark/log-out.svg",
           "light": "media/light/log-out.svg"
         }
@@ -67,6 +67,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@types/ejs": "^3.1.5",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.x",
     "@types/vscode": "^1.85.0",
@@ -79,6 +80,8 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.17",
+    "conf": "^12.0.0",
+    "ejs": "^3.1.9",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1"
   }
