@@ -44,13 +44,13 @@ export class panelProvider implements vscode.WebviewViewProvider {
     }
 
     private _initializeComponents() {
-        this._appComponentPath = vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "app.ejs").path;
-        this._loginComponentPath = vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "login.ejs").path;
-        this._mainComponent = fs.readFileSync(vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "main.ejs").path, "utf-8");
+        this._appComponentPath = vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "app.ejs").fsPath;
+        this._loginComponentPath = vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "login.ejs").fsPath;
+        this._mainComponent = fs.readFileSync(vscode.Uri.joinPath(this._extensionUri, COMPONENTS_PATH, "main.ejs").fsPath, "utf-8");
     }
 
     private _initializeTranslations() {
-        const translations = require(vscode.Uri.joinPath(this._extensionUri, TRANSLATIONS_PATH).path);
+        const translations = require(vscode.Uri.joinPath(this._extensionUri, TRANSLATIONS_PATH).fsPath);
         this._translation = translations[this._language] || translations['en'];
     }
 
