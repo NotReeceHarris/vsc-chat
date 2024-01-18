@@ -132,7 +132,7 @@ const handleSearchUserInput = (evt) => {
                 imgElement.src = `https://avatars.githubusercontent.com/u/${connection.id}?v=4`;
 
                 const statusDiv = document.createElement('div');
-                statusDiv.classList.add('bg-' + (connection.online ? 'green-400' : 'red-400'), 'border-4', 'border-bg', 'w-4', 'h-4', 'rounded-full', 'absolute', 'bottom-[-4px]', 'right-[-4px]');
+                statusDiv.classList.add('bg-' + (connection.online ? 'green-400' : 'red-400'), 'border-4', 'border-bg', 'w-4', 'h-4', 'rounded-full', 'absolute', 'bottom-[-4px]', 'right-[-4px]', 'border-sidebar');
 
 
                 connectionDiv.appendChild(imgElement);

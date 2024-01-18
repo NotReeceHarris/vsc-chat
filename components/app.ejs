@@ -1,9 +1,9 @@
 <div class="flex flex-col h-full gap-3">
-    <div class="flex flex-col gap-3 pb-4 border-b border-vs">
+    <div class="flex flex-col gap-3 pb-4 border-b">
         <div>
             <form class="relative" id="search-user">
                 <label for="Search" class="sr-only"> <%= translation['action-search'] %> </label>
-                <input type="text" id="search-user-input" placeholder="<%= translation['search-user-input'] %>" class="w-full rounded-md !py-2.5 !px-3 shadow-sm"/>
+                <input type="text" id="search-user-input" placeholder="<%= translation['search-user-input'] %>" class=" tracking-wider w-full rounded-md !py-2.5 !px-3 shadow-sm"/>
                 <span class="input-colors absolute inset-y-0 end-0 grid w-10 place-content-center">
                     <button id="search-button" type="submit" class="hover:!bg-transparent">
                         <span class="sr-only"><%= translation['action-search'] %></span>
@@ -19,15 +19,17 @@
 
         <!-- User Search -->
 
-        <span class="hidden items-center opacity-60" id="search-user-label">
+        <span class="hidden items-center opacity-60 tracking-wider " id="search-user-label">
             <span class="pr-4"><%= translation['search-user-label'] %></span>
+            <div class="h-px flex-1"></div>
         </span>
 
         <div id="search-user-results" class="hidden gap-2 flex-wrap"></div>
 
 
-        <span class="hidden items-center opacity-60" id="connections-label">
+        <span class="hidden items-center opacity-60 tracking-wider " id="connections-label">
             <span class="pr-4"><%= translation['connections-label'] %></span>
+            <div class="h-px flex-1"></div>
         </span>
 
         <div class="hidden gap-2 flex-wrap" id="connections"></div>
@@ -43,8 +45,8 @@
         </div>
         <form class="relative h-fit" id="message">
             <label for="send" class="sr-only"> <%= translation['send-message-label'] %> </label>
-            <input disabled type="text" id="send" placeholder="<%= translation['send-message-placeholder-disabled'] %>" class="w-full rounded-md !py-2.5 !p-[35px] !pl-3 shadow-sm"/>
-            <span class="input-colors absolute inset-y-0 end-0 grid w-10 place-content-center">
+            <input disabled type="text" id="send" placeholder="<%= translation['send-message-placeholder-disabled'] %>" class=" tracking-wider w-full rounded-md !py-2.5 !p-[35px] !pl-3 shadow-sm"/>
+            <span class="absolute inset-y-0 end-0 grid w-10 place-content-center">
                 <button type="submit" class="hover:!bg-transparent">
                     <span class="sr-only"><%= translation['action-send'] %></span>
                     <svg class="rotate-45 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>

@@ -13,7 +13,6 @@ const WEBSOCKET_URL:string = 'ws://localhost'; */
 
 const USER_KEY:string = 'user';
 const WEBSOCKET_KEY:string = 'websocket';
-
 const PANEL_ID:string = 'vsc-chat.panel';
 const LOGOUT_COMMAND:string = 'vsc-chat.logout';
 
