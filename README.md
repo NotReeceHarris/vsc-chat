@@ -7,9 +7,11 @@ VSC-Chat is a real-time messaging service integrated into Visual Studio Code, en
 
 ## Features
 
-- Group chats
-- Direct messaging
-- Code sharing
+- **Group chats**: Create group chats with up to 12 users.
+- **Direct messaging**: Direct messaging with no strings attached, no needed addons.
+- **Code sharing**: Share code snippets and syntax errors with ease.
+- **Native look-and-feel**: Use chat in your preferred theme and grid editor layout.
+- **Encryption**: All messages are encrypted and never read by the server.
 
 <!--
 
