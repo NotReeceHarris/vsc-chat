@@ -15,11 +15,18 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "keybindings": [
+      {
+          "command": "vsc-chat.open",
+          "key": "ctrl+alt+k",
+          "mac": "cmd+alt+k"
+      }
+  ],
     "viewsContainers": {
       "activitybar": [
         {
           "id": "vsc-chat-panel-view",
-          "title": "VSC Chat",
+          "title": "Chat (Ctrl+Shift+K)",
           "icon": "assets/icons/icon.svg"
         }
       ]
@@ -29,9 +36,9 @@
         {
           "type": "webview",
           "id": "vsc-chat.panel",
-          "name": "VSC Chat",
+          "name": "Chat (Ctrl+Shift+K)",
           "icon": "assets/icons/icon.svg",
-          "contextualTitle": "VSC Chat",
+          "contextualTitle": "Chat",
           "webviewId": "vsc-chat-panel-view"
         }
       ]
@@ -40,7 +47,7 @@
       {
         "command": "vsc-chat.logout",
         "title": "Logout",
-        "category": "VSC Chat",
+        "category": "Chat",
         "icon": {
           "dark": "assets/icons/dark/log-out.svg",
           "light": "assets/icons/light/log-out.svg"

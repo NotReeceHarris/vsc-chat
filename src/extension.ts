@@ -15,6 +15,7 @@ const USER_KEY:string = 'user';
 const WEBSOCKET_KEY:string = 'websocket';
 const PANEL_ID:string = 'vsc-chat.panel';
 const LOGOUT_COMMAND:string = 'vsc-chat.logout';
+const OPEN_COMMAND:string = 'vsc-chat.open';
 
 async function authenticate(codeOrSession: string, isSession: boolean): Promise<authenticationResponse> {
     const response = await fetch(`${SERVER_URL}/authenticate`, {
@@ -82,6 +83,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand(LOGOUT_COMMAND, async () => {
 		await clearSession(context.globalState);
 		panel.reloadWebview();
+	});
+
+    vscode.commands.registerCommand(OPEN_COMMAND, async () => {
+		panel.focusPanel();
 	});
 }
 

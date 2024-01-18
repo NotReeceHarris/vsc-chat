@@ -124,6 +124,12 @@ export class panelProvider implements vscode.WebviewViewProvider {
         this._setWebviewMessageHandler(webviewView);
     }
 
+    public focusPanel() {
+        if (this._view) {
+            this._view.show(true);
+        }
+    }
+
     public reloadWebview() {
         if (this._view) {
             this.resolveWebviewView(this._view);
