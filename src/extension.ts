@@ -4,8 +4,8 @@ import {authenticationResponse} from './lib/interfaces';
 import {isLoggedIn, hasSessionToken, getSessionToken} from './lib/misc';
 
 const GITHUB_CLIENT:string = '912edb61a73a1b6553dc';
-const SERVER_URL:string = 'http://localhost:3000';
-const WEBSOCKET_URL:string = 'ws://localhost:7071';
+const SERVER_URL:string = 'https://octopus-app-wbtyc.ondigitalocean.app';
+const WEBSOCKET_URL:string = 'ws://octopus-app-wbtyc.ondigitalocean.app';
 
 const USER_KEY:string = 'user';
 const WEBSOCKET_KEY:string = 'websocket';
@@ -30,7 +30,8 @@ async function handleAuthenticationResponse(globalState: vscode.Memento, authJso
         await clearSession(globalState);
         vscode.window.showErrorMessage(authJson?.error || 'Unknown error occured');
     } else {
-        const websocket = authJson.websocket === undefined ? WEBSOCKET_URL : authJson.websocket;
+        //const websocket = authJson.websocket === undefined ? WEBSOCKET_URL : authJson.websocket;
+        const websocket = WEBSOCKET_URL
         await globalState.update(USER_KEY, authJson.user);
         await globalState.update(WEBSOCKET_KEY, websocket);
         vscode.window.showInformationMessage(`Welcome ${authJson.user?.name}, you are now logged in as ${authJson.user?.username}`);
@@ -43,6 +44,7 @@ async function clearSession(globalState: vscode.Memento) {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
+
 	if (await isLoggedIn(context.globalState) && await hasSessionToken(context.globalState)) {
         const session = await getSessionToken(context.globalState);
         const authJson = await authenticate(session, true);

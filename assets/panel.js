@@ -2,7 +2,7 @@ const escapeHtml = unsafe => unsafe.replace(/[&<"']/g, match => ({ '&': '&amp;',
 let messagingUser;
 
 const connectToServer = async () => {
-    const ws = new WebSocket(`${webSocketUrl}/ws`);
+    const ws = new WebSocket(`${webSocketUrl}`);
     return new Promise((resolve) => {
         const timer = setInterval(() => {
             if (ws.readyState === 1) {
