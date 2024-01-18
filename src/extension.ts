@@ -30,8 +30,7 @@ async function handleAuthenticationResponse(globalState: vscode.Memento, authJso
         await clearSession(globalState);
         vscode.window.showErrorMessage(authJson?.error || 'Unknown error occured');
     } else {
-        //const websocket = authJson.websocket === undefined ? WEBSOCKET_URL : authJson.websocket;
-        const websocket = WEBSOCKET_URL
+        const websocket = authJson.websocket === undefined ? WEBSOCKET_URL : authJson.websocket;
         await globalState.update(USER_KEY, authJson.user);
         await globalState.update(WEBSOCKET_KEY, websocket);
         vscode.window.showInformationMessage(`Welcome ${authJson.user?.name}, you are now logged in as ${authJson.user?.username}`);
