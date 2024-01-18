@@ -5,7 +5,11 @@ import {isLoggedIn, hasSessionToken, getSessionToken} from './lib/misc';
 
 const GITHUB_CLIENT:string = '912edb61a73a1b6553dc';
 const SERVER_URL:string = 'https://octopus-app-wbtyc.ondigitalocean.app';
-const WEBSOCKET_URL:string = 'ws://octopus-app-wbtyc.ondigitalocean.app';
+const WEBSOCKET_URL:string = 'wss://octopus-app-wbtyc.ondigitalocean.app';
+
+/* const GITHUB_CLIENT:string = '912edb61a73a1b6553dc';
+const SERVER_URL:string = 'http://localhost';
+const WEBSOCKET_URL:string = 'ws://localhost'; */
 
 const USER_KEY:string = 'user';
 const WEBSOCKET_KEY:string = 'websocket';
@@ -30,6 +34,7 @@ async function handleAuthenticationResponse(globalState: vscode.Memento, authJso
         await clearSession(globalState);
         vscode.window.showErrorMessage(authJson?.error || 'Unknown error occured');
     } else {
+        console.log('Received WebSocket URL: ', authJson.websocket);
         const websocket = authJson.websocket === undefined ? WEBSOCKET_URL : authJson.websocket;
         await globalState.update(USER_KEY, authJson.user);
         await globalState.update(WEBSOCKET_KEY, websocket);

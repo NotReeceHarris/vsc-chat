@@ -75,14 +75,13 @@
     "@typescript-eslint/parser": "^6.15.0",
     "@vscode/test-cli": "^0.0.4",
     "@vscode/test-electron": "^2.3.8",
+    "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.17",
-    "conf": "^12.0.0",
-    "ejs": "^3.1.9",
-    "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.1"
+    "ejs": "^3.1.9"
   }
 }

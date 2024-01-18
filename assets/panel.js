@@ -2,12 +2,20 @@ const escapeHtml = unsafe => unsafe.replace(/[&<"']/g, match => ({ '&': '&amp;',
 let messagingUser;
 
 const connectToServer = async () => {
-    const ws = new WebSocket(`${webSocketUrl}`);
-    return new Promise((resolve) => {
+    const ws = new WebSocket(webSocketUrl);
+
+    ws.onerror = (error) => {
+        console.log(`WebSocket error:`, error);
+    };
+
+    return new Promise((resolve, reject) => {
         const timer = setInterval(() => {
             if (ws.readyState === 1) {
                 clearInterval(timer);
                 resolve(ws);
+            } else if (ws.readyState === 3) {
+                clearInterval(timer);
+                reject(new Error('WebSocket failed to connect'));
             }
         }, 10);
     });
@@ -74,15 +82,10 @@ const handleSearchUserInput = (evt) => {
     document.getElementById('clear-search').onclick = handleClearSearch;
     document.getElementById('search-user-input').onkeydown = handleSearchUserInput;
 
-    setInterval(() => {
-        sendMessage(ws, 'command', 'getconnections');
-    }, 7000);
-
     ws.onmessage = (webSocketMessage) => {
         const messageBody = JSON.parse(webSocketMessage.data);
 
         if (messageBody.type === 'message') {
-            console.log('Message received', messageBody);
 
             if (messageBody.sender === messagingUser || messageBody.to === messagingUser) {
                 const messagesContainer = document.getElementById('messages');
@@ -109,7 +112,6 @@ const handleSearchUserInput = (evt) => {
 
         if (messageBody.type === 'connections') {
             const connections = messageBody.connections;
-            console.log('connections', connections);
 
             document.getElementById('connections').innerHTML = '';
 
@@ -137,7 +139,6 @@ const handleSearchUserInput = (evt) => {
                 connectionDiv.appendChild(statusDiv);
 
                 connectionDiv.onclick = () => {
-                    console.log('clicked', connection.id);
 
                     document.getElementById('messages').innerHTML = '';
                     document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${connection.username}`;
@@ -163,7 +164,6 @@ const handleSearchUserInput = (evt) => {
 
         if (messageBody.type === 'search-user') {
             const users = messageBody.users;
-            console.log('users', users);
 
             document.getElementById('search-user-results').innerHTML = '';
 
@@ -193,7 +193,6 @@ const handleSearchUserInput = (evt) => {
                 searchDiv.appendChild(imgElement);
 
                 searchDiv.onclick = () => {
-                    console.log('clicked', user.id);
 
                     document.getElementById('messages').innerHTML = '';
                     document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${user.username}`;
