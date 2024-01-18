@@ -16,13 +16,15 @@ interface authenticationResponse {
 		pfp: string
 		sessionToken: string
 	}
-
+	websocket?: string
 }
 
 export async function activate(context: vscode.ExtensionContext) {
 
 	if (await context.globalState.get(`user`) !== undefined) {
+
 		const user = await context.globalState.get(`user`) as authenticationResponse['user'];
+
 		const response = await fetch(`${serverUrl}/authenticate`, {
 			method: 'POST',
 			headers: {
@@ -32,18 +34,28 @@ export async function activate(context: vscode.ExtensionContext) {
 				session: user?.sessionToken || 'notoken'
 			})
 		});
+
 		const authJson = await response.json() as authenticationResponse;
+
+		console.log(authJson)
+
 		if (authJson.success === false) {
+
 			await context.globalState.update(`user`, undefined);
+			await context.globalState.update(`websocket`, undefined);
 			vscode.window.showErrorMessage(authJson?.error || 'Unknown error occured');
+
 		} else {
+
 			await context.globalState.update(`user`, authJson.user);
+			await context.globalState.update(`websocket`, authJson.websocket === undefined ? webSocketUrl : authJson.websocket);
 			vscode.window.showInformationMessage(`Welcome ${authJson.user?.name}, you are now logged in as ${authJson.user?.username}`);
+		
 		}
 		
 	}
 
-	const panel = new panelProvider(context.extensionUri, githubClient, context.globalState, webSocketUrl);
+	const panel = new panelProvider(context.extensionUri, githubClient, context.globalState);
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(
@@ -76,6 +88,8 @@ export async function activate(context: vscode.ExtensionContext) {
 					}
 
 					await context.globalState.update(`user`, authJson.user);
+					await context.globalState.update(`websocket`, authJson.websocket === undefined ? webSocketUrl : authJson.websocket);
+					
 					vscode.window.showInformationMessage(`Welcome ${authJson.user?.name}, you are now logged in as ${authJson.user?.username}`);
 					panel.reloadWebview();
 				}
@@ -85,6 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	vscode.commands.registerCommand('vsc-chat.logout', async () => {
 		await context.globalState.update(`user`, undefined);
+		await context.globalState.update(`websocket`, undefined);
 		panel.reloadWebview();
 	});
 

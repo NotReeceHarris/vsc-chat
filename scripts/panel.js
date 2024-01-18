@@ -72,13 +72,11 @@ const handleSearchUserInput = (evt) => {
     document.getElementById('message').onsubmit = evt => handleSendMessage(ws, evt);
     document.getElementById('search-user').onsubmit = evt => handleSearchUser(ws, evt);
     document.getElementById('clear-search').onclick = handleClearSearch;
-    document.getElementById('search-user-input').onfocus = handleSearchUserInput;
     document.getElementById('search-user-input').onkeydown = handleSearchUserInput;
-    document.getElementById('search-user-input').onclick = handleSearchUserInput;
 
     setInterval(() => {
         sendMessage(ws, 'command', 'getconnections');
-    }, 10000);
+    }, 7000);
 
     ws.onmessage = (webSocketMessage) => {
         const messageBody = JSON.parse(webSocketMessage.data);
@@ -88,10 +86,10 @@ const handleSearchUserInput = (evt) => {
 
             if (messageBody.sender === messagingUser || messageBody.to === messagingUser) {
                 const messagesContainer = document.getElementById('messages');
-                const fromSelf = messageBody.sender !== messagingUser;
+                const weSender = messageBody.sender === userId;
 
                 var divElement = document.createElement('div');
-                divElement.className = `flex flex-col gap-1 ${fromSelf ? 'pl-3 text-end' : 'pr-3'}`;
+                divElement.className = `flex flex-col gap-1 ${weSender ? 'pl-3 text-end' : 'pr-3'}`;
 
                 var spanElement = document.createElement('span');
                 spanElement.className = 'opacity-60 font-light';
@@ -124,7 +122,7 @@ const handleSearchUserInput = (evt) => {
                 const connectionsContainer = document.getElementById('connections');
                 const connectionDiv = document.createElement('div');
 
-                connectionDiv.setAttribute('title', `${connection.username} | ${connection.online ? 'Online' : 'Offline'}`);
+                connectionDiv.setAttribute('title', `${connection.username} | ${connection.online ? translation['state-online'] : translation['state-offline']}`);
                 connectionDiv.classList.add('cursor-pointer', 'relative');
 
                 const imgElement = document.createElement('img');
@@ -140,7 +138,9 @@ const handleSearchUserInput = (evt) => {
 
                 connectionDiv.onclick = () => {
                     console.log('clicked', connection.id);
-                    document.getElementById('send').placeholder = `Send message to @${connection.username}`;
+
+                    document.getElementById('messages').innerHTML = '';
+                    document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${connection.username}`;
 
                     messagingUser = connection.id;
 
@@ -171,7 +171,7 @@ const handleSearchUserInput = (evt) => {
                 const searchsContainer = document.getElementById('search-user-results');
                 const searchDiv = document.createElement('div');
                 searchDiv.classList.add('text-center', 'w-full', 'opacity-60');
-                searchDiv.innerText = 'No users found';
+                searchDiv.innerText = translation['no-users-found'] + ' :(';
                 searchsContainer.appendChild(searchDiv);
             }
 
@@ -194,7 +194,9 @@ const handleSearchUserInput = (evt) => {
 
                 searchDiv.onclick = () => {
                     console.log('clicked', user.id);
-                    document.getElementById('send').placeholder = `Send message to @${user.username}`;
+
+                    document.getElementById('messages').innerHTML = '';
+                    document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${user.username}`;
                     messagingUser = user.id;
 
                     if (document.getElementById('send').attributes.getNamedItem('disabled') !== null) {
