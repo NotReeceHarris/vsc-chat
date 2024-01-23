@@ -4,6 +4,10 @@
   "description": "Peer-2-Peer authenticated chat intergrated into vscode.",
   "version": "0.0.1",
   "publisher": "notreeceharris",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NotReeceHarris/vsc-chat"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
