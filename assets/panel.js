@@ -80,7 +80,7 @@ const handleSearchUserInput = (evt) => {
     let ws = await connectToServer();
 
     ws.onclose = async () => {
-        console.log('WebSocket closed, reconnecting...')
+        console.log('WebSocket closed, reconnecting...');
         ws = await connectToServer();
     };
 
@@ -89,8 +89,6 @@ const handleSearchUserInput = (evt) => {
     document.getElementById('send').addEventListener('input', function(e) {
         // Get the input value
         const inputValue = document.getElementById('send').innerText.trim();
-    
-        console.log(inputValue.length );
     
         if (inputValue.length >= 1) {
             document.getElementById('send-placeholder').classList.add('hidden');
