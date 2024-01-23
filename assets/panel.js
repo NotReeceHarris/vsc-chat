@@ -2,12 +2,7 @@ const escapeHtml = unsafe => unsafe.replace(/[&<"']/g, match => ({ '&': '&amp;',
 let messagingUser;
 
 const connectToServer = async () => {
-    // Keep open
     const ws = new WebSocket(webSocketUrl);
-
-    ws.onerror = (error) => {
-        console.log(`WebSocket error:`, error);
-    };
 
     return new Promise((resolve, reject) => {
         const timer = setInterval(() => {
@@ -16,6 +11,7 @@ const connectToServer = async () => {
                 resolve(ws);
             } else if (ws.readyState === 3) {
                 clearInterval(timer);
+                console.log(ws)
                 reject(new Error('WebSocket failed to connect'));
             }
         }, 10);
@@ -44,6 +40,7 @@ const handleSendMessage = (ws, evt) => {
 
     if (messagingUser !== undefined) {
         const input = document.querySelector('#send');
+
         if (input.innerText.trim() !== '') {
             sendMessage(ws, 'message', input.innerText.trim(), messagingUser);
             input.innerText = '';
@@ -51,7 +48,6 @@ const handleSendMessage = (ws, evt) => {
         }
     }
 };
-
 
 const handleSearchUser = (ws, evt) => {
     evt.preventDefault();
@@ -76,54 +72,107 @@ const handleSearchUserInput = (evt) => {
     toggleVisibility('clear-search', 'hidden', 'add');
 };
 
-(async function () {
-    let ws = await connectToServer();
+const handleSendInput = function(e) {
+    // Get the input value
+    const inputValue = document.getElementById('send').innerText.trim();
+
+    if (inputValue.length >= 1) {
+        document.getElementById('send-placeholder').classList.add('hidden');
+    } else {
+        document.getElementById('send-placeholder').classList.remove('hidden');
+    }
+
+    if (inputValue.length >= 1000) {
+        document.getElementById('send').innerText = inputValue.substring(0, 1000);
+    }
+};
+
+const handleSendEnter = function(ws, event) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        handleSendMessage(ws, event);
+        event.preventDefault();
+    };
+};
+
+function extractContentBetweenBackticks(inputString) {
+    const regex = /```([\s\S]+?)```/g;
+    const matches = inputString.match(regex);
+
+    if (matches) {
+        // Extract content between backticks from each match
+        const result = matches.map(match => match.slice(3, -3));
+        return result;
+    } else {
+        return [];
+    }
+}
+
+async function connect () {
+
+    let ws = await connectToServer().catch(async err => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        connect();
+    });
+
+    ws.send(JSON.stringify({ type: 'command', session, message: 'getconnections' }));
+
+    document.getElementById('send').addEventListener('input', evt => handleSendInput(evt));
+    document.getElementById('send').addEventListener('keydown', evt => handleSendEnter(ws, evt));
+    document.getElementById('message').addEventListener('submit', evt => handleSendMessage(ws, evt));
+    document.getElementById('search-user').addEventListener('submit', evt => handleSearchUser(ws, evt));
+    document.getElementById('clear-search').addEventListener('click', evt => handleClearSearch(evt));
+    document.getElementById('search-user-input').addEventListener('input', evt => handleSearchUserInput(evt));
 
     ws.onclose = async () => {
         console.log('WebSocket closed, reconnecting...');
-        ws = await connectToServer();
+
+        document.getElementById('send').removeEventListener('input', evt => handleSendInput(evt));
+        document.getElementById('send').removeEventListener('keydown', evt => handleSendEnter(ws, evt));
+        document.getElementById('message').removeEventListener('submit', evt => handleSendMessage(ws, evt));
+        document.getElementById('search-user').removeEventListener('submit', evt => handleSearchUser(ws, evt));
+        document.getElementById('clear-search').removeEventListener('click', evt => handleClearSearch(evt));
+        document.getElementById('search-user-input').removeEventListener('input', evt => handleSearchUserInput(evt));
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        connect();
     };
 
-    sendMessage(ws, 'command', 'getconnections');
+    ws.onerror = (error) => {
+        console.log(`WebSocket error:`, error);
+    };
 
-    document.getElementById('send').addEventListener('input', function(e) {
-        // Get the input value
-        const inputValue = document.getElementById('send').innerText.trim();
-    
-        if (inputValue.length >= 1) {
-            document.getElementById('send-placeholder').classList.add('hidden');
-        } else {
-            document.getElementById('send-placeholder').classList.remove('hidden');
-        }
-
-        if (inputValue.length >= 1000) {
-            document.getElementById('send').innerText = inputValue.substring(0, 1000);
-        }
-    });
-
-    document.getElementById('send').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            handleSendMessage(ws, event);
-            event.preventDefault();
-    }});
-
-    document.getElementById('message').onsubmit = evt => handleSendMessage(ws, evt);
-    document.getElementById('search-user').onsubmit = evt => handleSearchUser(ws, evt);
-    document.getElementById('clear-search').onclick = handleClearSearch;
-    document.getElementById('search-user-input').onkeydown = handleSearchUserInput;
+    // Send ping every 30 seconds
+    setInterval(() => {
+        ws.send(JSON.stringify({ type: 'ping', session }));
+        console.log('ping');
+    }, 15000);
 
     ws.onmessage = (webSocketMessage) => {
         const messageBody = JSON.parse(webSocketMessage.data);
+
+        if (messageBody.type === 'pong') {
+            console.log('pong');
+        }
 
         if (messageBody.type === 'message') {
 
             if (messageBody.sender === messagingUser || messageBody.to === messagingUser) {
                 const messagesContainer = document.getElementById('messages');
-                const weSender = messageBody.sender === userId;
 
                 var spanElement = document.createElement('span');
                 spanElement.textContent = messageBody.message;
+                let secureText = spanElement.outerHTML;
 
+                console.log(extractContentBetweenBackticks(secureText))
+
+                extractContentBetweenBackticks(secureText).forEach((code) => {
+                    const highlightedCode = hljs.highlight(code, { language: 'javascript' }).value;
+                    secureText = secureText.replace('```' + code + '```', '<code class="p-1 rounded-sm w-full block text-nowrap overflow-x-auto">' + highlightedCode + '</code>');
+                });
+
+                let formattedText = secureText.replace(/\n/g, '<br>');
+
+                console.log(formattedText)
 
                 messagesContainer.innerHTML += `
                 <div class="flex flex-col gap-3 pl-3 pt-4">
@@ -132,12 +181,13 @@ const handleSearchUserInput = (evt) => {
                         <span>${messageBody.senderUsername}</span>
                     </div>
                     <div class="break-words font-light opacity-80">
-                        ${spanElement.outerHTML}
+                        ${formattedText}
                     </div>
                 </div>
                 `;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
+            return;
 
         }
 
@@ -190,6 +240,8 @@ const handleSearchUserInput = (evt) => {
                 document.getElementById('connections-label').classList.remove('hidden');
                 document.getElementById('connections-label').classList.add('flex');
             }
+
+            return;
 
         }
 
@@ -245,8 +297,14 @@ const handleSearchUserInput = (evt) => {
             document.getElementById('search-user-label').classList.remove('hidden');
             document.getElementById('search-user-label').classList.add('flex');
 
+            return;
+
         }
 
     };
 
-})();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    connect();
+});

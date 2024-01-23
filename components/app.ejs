@@ -19,7 +19,7 @@
 
         <!-- User Search -->
 
-        <span class="hidden items-center opacity-60 tracking-wider " id="search-user-label">
+        <span class="hidden items-center opacity-60 tracking-wider" id="search-user-label">
             <span class="pr-4"><%= translation['search-user-label'] %></span>
             <div class="h-px flex-1"></div>
         </span>
@@ -27,7 +27,7 @@
         <div id="search-user-results" class="hidden gap-2 flex-wrap"></div>
 
 
-        <span class="hidden items-center opacity-60 tracking-wider !hidden " id="connections-label">
+        <span class="hidden items-center opacity-60 tracking-wider " id="connections-label">
             <span class="pr-4"><%= translation['connections-label'] %></span>
             <div class="h-px flex-1"></div>
         </span>
@@ -45,7 +45,7 @@
         </div>
         <form class="relative h-fit shadow-sm" id="message">
             <label for="send" class="sr-only"> <%= translation['send-message-label'] %> </label>
-            <div id="send-placeholder" class="break-all overflow-y-hidden h-[25.684px] pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)] absolute pointer-events-none">
+            <div id="send-placeholder" class="text-ellipsis whitespace-nowrap overflow-hidden h-[25.684px] pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)] absolute pointer-events-none">
                 <%= translation['send-message-placeholder-disabled'] %>
             </div>
             <div contenteditable="true" id="send" class="overflow-y-auto min-h-[25.684px] max-h-[305.641px] resize-none tracking-wider rounded-l-md pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)]"></div>

@@ -2,12 +2,18 @@
 <html lang="<%= language %>" class="h-full">
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' <%= webview.cspSource %>; script-src 'nonce-<%= nonce %>'; connect-src <%= globalState.get('websocket') %>;">
+
+        <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' 'self' <%= webview.cspSource %> https://cdnjs.cloudflare.com; script-src 'nonce-<%= nonce %>' cdnjs.cloudflare.com; connect-src <%= globalState.get('websocket') %> cdnjs.cloudflare.com https://cdnjs.cloudflare.com;">
+
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link nonce="<%= nonce %>" href="<%= styleMain %>" rel="stylesheet">
 
         <% if (globalState.get('user') !== undefined) { %>
+
+            
+            <link nonce="<%= nonce %>" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+            <script nonce="<%= nonce %>" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
             
             <script nonce="<%= nonce %>">
                 const tsvscode = acquireVsCodeApi(); 
