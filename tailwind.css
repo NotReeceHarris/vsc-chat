@@ -40,7 +40,8 @@ button svg {
 	stroke: var(--vscode-input-placeholderForeground);
 }
 
-input::placeholder, #send-placeholder {
+input::placeholder,
+#send-placeholder {
 	color: var(--vscode-input-placeholderForeground);
 }
 
@@ -59,8 +60,8 @@ input::placeholder, #send-placeholder {
 
 #search-user-label div, 
 #connections-label div {
-	background-color: var(--vscode-settings-headerForeground);
-	opacity: 0.5;
+	background-color: var(--vscode-inlineChat-border);
+    opacity: 0.5;
 }
 
 .divide-y {

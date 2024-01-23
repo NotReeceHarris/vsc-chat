@@ -144,16 +144,11 @@ async function connect () {
     // Send ping every 30 seconds
     setInterval(() => {
         ws.send(JSON.stringify({ type: 'ping', session }));
-        console.log('ping');
-    }, 15000);
+    }, 30000);
 
     ws.onmessage = (webSocketMessage) => {
         const messageBody = JSON.parse(webSocketMessage.data);
-
-        if (messageBody.type === 'pong') {
-            console.log('pong');
-        }
-
+        
         if (messageBody.type === 'message') {
 
             if (messageBody.sender === messagingUser || messageBody.to === messagingUser) {
@@ -161,18 +156,14 @@ async function connect () {
 
                 var spanElement = document.createElement('span');
                 spanElement.textContent = messageBody.message;
-                let secureText = spanElement.outerHTML;
-
-                console.log(extractContentBetweenBackticks(secureText))
+                let secureText = spanElement.outerHTML.replaceAll('```\n', '```');
 
                 extractContentBetweenBackticks(secureText).forEach((code) => {
-                    const highlightedCode = hljs.highlight(code, { language: 'javascript' }).value;
-                    secureText = secureText.replace('```' + code + '```', '<code class="p-1 rounded-sm w-full block text-nowrap overflow-x-auto">' + highlightedCode + '</code>');
+                    const highlightedCode = hljs.highlightAuto(code).value;
+                    secureText = secureText.replace('```' + code + '```', '<code class="p-2 rounded-sm w-full block text-nowrap overflow-x-auto">' + highlightedCode + '</code>');
                 });
 
                 let formattedText = secureText.replace(/\n/g, '<br>');
-
-                console.log(formattedText)
 
                 messagesContainer.innerHTML += `
                 <div class="flex flex-col gap-3 pl-3 pt-4">
