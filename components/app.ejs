@@ -27,7 +27,7 @@
         <div id="search-user-results" class="hidden gap-2 flex-wrap"></div>
 
 
-        <span class="hidden items-center opacity-60 tracking-wider " id="connections-label">
+        <span class="hidden items-center opacity-60 tracking-wider !hidden " id="connections-label">
             <span class="pr-4"><%= translation['connections-label'] %></span>
             <div class="h-px flex-1"></div>
         </span>
@@ -38,15 +38,18 @@
     <div class="h-full flex flex-col gap-3">
         <div class="grow flex flex-col">
             <div class="grow pb-3 h-10">
-                <div class="flex flex-col gap-4 h-full overflow-y-auto pr-2" id="messages">
+                <div class="flex flex-col gap-4 h-full overflow-y-auto pr-2 divide-y" id="messages">
                     
                 </div>
             </div>
         </div>
-        <form class="relative h-fit" id="message">
+        <form class="relative h-fit shadow-sm" id="message">
             <label for="send" class="sr-only"> <%= translation['send-message-label'] %> </label>
-            <input disabled type="text" id="send" placeholder="<%= translation['send-message-placeholder-disabled'] %>" class=" tracking-wider w-full rounded-md !py-2.5 !p-[35px] !pl-3 shadow-sm"/>
-            <span class="absolute inset-y-0 end-0 grid w-10 place-content-center">
+            <div id="send-placeholder" class="break-all overflow-y-hidden h-[25.684px] pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)] absolute pointer-events-none">
+                <%= translation['send-message-placeholder-disabled'] %>
+            </div>
+            <div contenteditable="true" id="send" class="overflow-y-auto min-h-[25.684px] max-h-[305.641px] resize-none tracking-wider rounded-l-md pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)]"></div>
+            <span id="message-button" class="absolute inset-y-0 end-0 grid w-10 place-content-center rounded-r-md">
                 <button type="submit" class="hover:!bg-transparent">
                     <span class="sr-only"><%= translation['action-send'] %></span>
                     <svg class="rotate-45 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
@@ -55,3 +58,9 @@
         </form>
     </div>
 </div>
+
+
+
+<!-- 
+<textarea rows="1" wrap="off" disabled="true" type="text" id="send" placeholder="<%= translation['send-message-placeholder-disabled'] %>" class="h-full resize-none tracking-wider rounded-l-md pt-2.5 pb-1 px-3 w-[calc(100%-2.5rem)] shadow-sm overflow-x-clip"/></textarea>
+-->

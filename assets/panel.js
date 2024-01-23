@@ -2,6 +2,7 @@ const escapeHtml = unsafe => unsafe.replace(/[&<"']/g, match => ({ '&': '&amp;',
 let messagingUser;
 
 const connectToServer = async () => {
+    // Keep open
     const ws = new WebSocket(webSocketUrl);
 
     ws.onerror = (error) => {
@@ -42,13 +43,15 @@ const handleSendMessage = (ws, evt) => {
     evt.preventDefault();
 
     if (messagingUser !== undefined) {
-        const input = evt.target.querySelector('input');
-        if (input.value.trim() !== '') {
-            sendMessage(ws, 'message', input.value.trim(), messagingUser);
-            input.value = '';
+        const input = document.querySelector('#send');
+        if (input.innerText.trim() !== '') {
+            sendMessage(ws, 'message', input.innerText.trim(), messagingUser);
+            input.innerText = '';
+            document.getElementById('send-placeholder').classList.remove('hidden');
         }
     }
 };
+
 
 const handleSearchUser = (ws, evt) => {
     evt.preventDefault();
@@ -74,8 +77,37 @@ const handleSearchUserInput = (evt) => {
 };
 
 (async function () {
-    const ws = await connectToServer();
+    let ws = await connectToServer();
+
+    ws.onclose = async () => {
+        console.log('WebSocket closed, reconnecting...')
+        ws = await connectToServer();
+    };
+
     sendMessage(ws, 'command', 'getconnections');
+
+    document.getElementById('send').addEventListener('input', function(e) {
+        // Get the input value
+        const inputValue = document.getElementById('send').innerText.trim();
+    
+        console.log(inputValue.length );
+    
+        if (inputValue.length >= 1) {
+            document.getElementById('send-placeholder').classList.add('hidden');
+        } else {
+            document.getElementById('send-placeholder').classList.remove('hidden');
+        }
+
+        if (inputValue.length >= 1000) {
+            document.getElementById('send').innerText = inputValue.substring(0, 1000);
+        }
+    });
+
+    document.getElementById('send').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            handleSendMessage(ws, event);
+            event.preventDefault();
+    }});
 
     document.getElementById('message').onsubmit = evt => handleSendMessage(ws, evt);
     document.getElementById('search-user').onsubmit = evt => handleSearchUser(ws, evt);
@@ -91,20 +123,21 @@ const handleSearchUserInput = (evt) => {
                 const messagesContainer = document.getElementById('messages');
                 const weSender = messageBody.sender === userId;
 
-                var divElement = document.createElement('div');
-                divElement.className = `flex flex-col gap-1 ${weSender ? 'pl-3 text-end' : 'pr-3'}`;
-
                 var spanElement = document.createElement('span');
-                spanElement.className = 'opacity-60 font-light';
-                spanElement.textContent = `@${messageBody.senderUsername}`;
+                spanElement.textContent = messageBody.message;
 
-                var divMessageElement = document.createElement('div');
-                divMessageElement.textContent = messageBody.message;
 
-                divElement.appendChild(spanElement);
-                divElement.appendChild(divMessageElement);
-
-                messagesContainer.appendChild(divElement);
+                messagesContainer.innerHTML += `
+                <div class="flex flex-col gap-3 pl-3 pt-4">
+                    <div class="flex gap-2 place-items-center">
+                        <img class="w-6 h-6 rounded-full" src="https://avatars.githubusercontent.com/u/${messageBody.sender}?v=4">
+                        <span>${messageBody.senderUsername}</span>
+                    </div>
+                    <div class="break-words font-light opacity-80">
+                        ${spanElement.outerHTML}
+                    </div>
+                </div>
+                `;
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
@@ -141,7 +174,7 @@ const handleSearchUserInput = (evt) => {
                 connectionDiv.onclick = () => {
 
                     document.getElementById('messages').innerHTML = '';
-                    document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${connection.username}`;
+                    document.getElementById('send-placeholder').innerText = `${translation['send-message-placeholder']} @${connection.username}`;
 
                     messagingUser = connection.id;
 
@@ -195,12 +228,14 @@ const handleSearchUserInput = (evt) => {
                 searchDiv.onclick = () => {
 
                     document.getElementById('messages').innerHTML = '';
-                    document.getElementById('send').placeholder = `${translation['send-message-placeholder']} @${user.username}`;
+                    document.getElementById('send-placeholder').innerText = `${translation['send-message-placeholder']} @${user.username}`;
                     messagingUser = user.id;
 
                     if (document.getElementById('send').attributes.getNamedItem('disabled') !== null) {
                         document.getElementById('send').attributes.removeNamedItem('disabled');
                     }
+
+                    clearSearchResults();
                 };
 
                 searchsContainer.appendChild(searchDiv);
