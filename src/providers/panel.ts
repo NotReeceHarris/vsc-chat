@@ -29,13 +29,7 @@ export class panelProvider implements vscode.WebviewViewProvider {
     private _language: string = vscode.env.language;
     private _translation?: Translation;
 
-    constructor(private readonly _extensionUri: vscode.Uri, private readonly githubClient: string, private readonly globalState: vscode.Memento) { 
-        vscode.window.onDidChangeActiveTextEditor(editor => {
-            if (editor) {
-                this.reloadWebview();
-            }
-        }, null, []);
-    }
+    constructor(private readonly _extensionUri: vscode.Uri, private readonly githubClient: string, private readonly globalState: vscode.Memento) { }
 
     private _initializePaths(webviewView: vscode.WebviewView) {
         this._styleVSCodeUri = webviewView.webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, ASSETS_PATH, "vscode.css"));
@@ -57,7 +51,7 @@ export class panelProvider implements vscode.WebviewViewProvider {
     private _setWebviewOptions(webviewView: vscode.WebviewView) {
         webviewView.webview.options = {
             enableScripts: true,
-            localResourceRoots: [this._extensionUri],
+            localResourceRoots: [this._extensionUri]
         };
     }
 

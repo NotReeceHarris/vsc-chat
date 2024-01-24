@@ -80,6 +80,12 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    vscode.window.registerWebviewPanelSerializer(PANEL_ID, {
+        async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+            webviewPanel.webview.html = state.html;
+        }
+    });
+
 	vscode.commands.registerCommand(LOGOUT_COMMAND, async () => {
 		await clearSession(context.globalState);
 		panel.reloadWebview();
