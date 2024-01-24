@@ -1,13 +1,35 @@
 {
   "name": "vsc-chat",
-  "displayName": "VSC Chat",
-  "description": "Peer-2-Peer authenticated chat intergrated into vscode.",
-  "version": "0.0.1",
+  "displayName": "VSC Messaging Service",
+  "description": "Authenticated messaging system built for teams and friends, integrated into Visual Studio Code with utilities.",
+  "version": "0.0.2",
   "publisher": "notreeceharris",
+  "icon": "assets/logo.png",
+  "author": {
+    "name": "Reece Harris",
+    "email": "reeceharris@duck.com",
+    "url": "https://reeceharris.net"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NotReeceHarris/vsc-chat"
+    "url": "https://github.com/NotReeceHarris/vsc-chat/issues"
   },
+  "bugs": {
+    "url": "https://github.com/ritwickdey/vscode-live-server/issues",
+    "email": "reeceharris@duck.com"
+  },
+  "galleryBanner": {
+    "color": "#0a3e61",
+    "theme": "dark"
+  },
+  "keywords": [
+    "communication",
+    "collaboration",
+    "team chat",
+    "socail",
+    "github",
+    "chat"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -77,6 +99,7 @@
     "tw": "npx tailwindcss -i tailwind.css -o ./assets/style.min.css --watch --minify",
     "test": "vscode-test"
   },
+  "license": "AGPL-3.0",
   "devDependencies": {
     "@types/ejs": "^3.1.5",
     "@types/mocha": "^10.0.6",
